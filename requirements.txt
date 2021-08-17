@@ -1,0 +1,7 @@
+Django==3.2.3
+djangorestframework
+django-bootstrap3
+requests
+coverage
+pytest-django
+django-environ

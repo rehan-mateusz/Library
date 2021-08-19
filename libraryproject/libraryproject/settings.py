@@ -21,6 +21,7 @@ environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'bootstrap3',
     'rest_framework',
+    'django_filters'
 ]
 
 # My apps
@@ -142,3 +144,4 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+GOOGLE_API_KEY = env('GOOGLE_API_KEY')

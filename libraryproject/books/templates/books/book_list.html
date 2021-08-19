@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <div class="col-sm-10 blogShort">
+      <form method="GET">
+        <h3>Filter books:</h3>
+        <br>
+        {% bootstrap_form filter.form layout='horizontal' %}
+
+        <br>
+        <br>
+        <input class="btn btn-default" type="submit" value="Filter!">
+        <a href="{%url 'books:books_list' %}">
+          <button type="button" class="btn btn-default">Reset Filters!</button>
+        </a>
+      </form>
+      <br>
+    </div>
+
+<div class="container">
+    <table class="table-sm table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Published</th>
+          <th>ISBN</th>
+          <th>Pages</th>
+          <th>Link to cover</th>
+          <th>Language</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in book_list %}
+        <tr>
+          <td> {{book.title}}</td>
+          <td> {{book.author}}</td>
+          <td> {{book.published_date}}</td>
+          <td> {{book.isbn_13}}</td>
+          <td> {{book.pages}}</td>
+          <td> {{book.cover_link}}</td>
+          <td> {{book.publication_language}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}

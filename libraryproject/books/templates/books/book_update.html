@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+<div class="col-sm-10">
+  <h1>Edit book:</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% if form.title.value %}
+      <input class="btn btn-default" type="submit" value="Edit!">
+    {% else %}
+      <input class="btn btn-default" type="submit" value="Create!">
+    {% endif %}
+
+  </form>
+</div>
+{% endblock %}

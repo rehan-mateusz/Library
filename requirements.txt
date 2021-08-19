@@ -5,3 +5,5 @@ requests
 coverage
 pytest-django
 django-environ
+git+https://github.com/dracos/django-date-extensions.git
+django-filter

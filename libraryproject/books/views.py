@@ -61,16 +61,16 @@ class GoogleBooksView(FormView):
         url = prepare_url(form)
         client = requests.session()
         response = client.get(url)
-
-        books_list = response.json()['items']
-        books_model_data_list = get_books_model_data(response.json()['items'])
-        for book in books_model_data_list:
-            if not models.Book.objects.filter(isbn_13=book['isbn_13']).count():
-                try:
-                    new_book = models.Book(**book)
-                    new_book.save()
-                except:
-                    pass
+        if response.json()['totalItems'] > 0:
+            books_list = response.json()['items']
+            books_model_data_list = get_books_model_data(response.json()['items'])
+            for book in books_model_data_list:
+                if not models.Book.objects.filter(isbn_13=book['isbn_13']).count():
+                    try:
+                        new_book = models.Book(**book)
+                        new_book.save()
+                    except:
+                        pass
 
         return HttpResponseRedirect(self.get_success_url())
 

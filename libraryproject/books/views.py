@@ -55,23 +55,23 @@ class GoogleBooksView(FormView):
             url = 'https://www.googleapis.com/books/v1/volumes?q='
             for key, value in form.cleaned_data.items():
                 if value:
-                    url = url + key + ':' + value + '&'
-            url = url + 'key=' + settings.GOOGLE_API_KEY
+                    url = url + key + ':' + value + '+'
+            url = url[:-1] + '&key=' + settings.GOOGLE_API_KEY
             return url
         url = prepare_url(form)
         client = requests.session()
         response = client.get(url)
 
         books_list = response.json()['items']
-        print(len(books_list))
         books_model_data_list = get_books_model_data(response.json()['items'])
         for book in books_model_data_list:
             if not models.Book.objects.filter(isbn_13=book['isbn_13']).count():
                 try:
                     new_book = models.Book(**book)
                     new_book.save()
-                except Exception as e:
-                    print(e)
+                except:
+                    pass
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):

@@ -1,8 +1,5 @@
 __pycache__
 *.pyc
 .env
-Dockerfile
-docker-compose.yml
-.gitignore
 scripts
 *.sqlite3

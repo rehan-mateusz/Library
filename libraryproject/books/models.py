@@ -1,5 +1,8 @@
+from datetime import date
+
 from django.db import models
 from django.core.validators import MinLengthValidator
+from django.core.validators import MaxValueValidator
 
 from django_date_extensions import fields
 
@@ -9,7 +12,8 @@ from .languages import languages
 class Book(models.Model):
     title = models.CharField(max_length=256)
     author = models.CharField(max_length=256)
-    published_date = fields.ApproximateDateField(null=True, blank=True)
+    published_date = fields.ApproximateDateField(null=True, blank=True,
+        validators=[MaxValueValidator(limit_value=date.today)])
     isbn_13 = models.CharField(max_length=13, unique=True, null=True,
         blank=True, validators=[MinLengthValidator(13)])
     pages = models.PositiveSmallIntegerField(null=True, blank=True) #najdluzsza ksiazka ma 5472 strony

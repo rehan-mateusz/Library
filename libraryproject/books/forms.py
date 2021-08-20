@@ -8,6 +8,12 @@ class BookForm(forms.ModelForm):
         model = models.Book
         fields = '__all__'
 
+    def clean(self):
+        super(BookForm, self).clean()
+        isbn_13 = self.cleaned_data['isbn_13']
+        if (not isbn_13.isnumeric()) and isbn_13 != '':
+            self.add_error('isbn_13', 'Only numbers allowed!')
+
 class GoogleForm(forms.Form):
     intitle = forms.CharField(required=False, label='Title contains:')
     inauthor = forms.CharField(required=False, label='Author contains:')

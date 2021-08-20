@@ -2,8 +2,8 @@
 {% load bootstrap3 %}
 
 {% block content %}
-
-    <div class="col-sm-10 blogShort">
+<div class="container">
+  <div class="col-sm-10 blogShort">
       <form method="GET">
         <h3>Filter books:</h3>
         <br>
@@ -18,7 +18,15 @@
       </form>
       <br>
     </div>
-
+</div>
+<div class="container">
+  <a href="{%url 'books:book_add' %}">
+    <button type="button" class="btn btn-default">Add new book</button>
+  </a>
+  <a href="{%url 'books:google_search' %}">
+    <button type="button" class="btn btn-default">Search in google api</button>
+  </a>
+</div>
 <div class="container">
     <table class="table-sm table-striped">
       <thead>
@@ -42,6 +50,11 @@
           <td> {{book.pages}}</td>
           <td> {{book.cover_link}}</td>
           <td> {{book.publication_language}}</td>
+          <td>
+            <a href="{%url 'books:book_update' book.id %}">
+              <button type="button" class="btn btn-default">Edit</button>
+            </a>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

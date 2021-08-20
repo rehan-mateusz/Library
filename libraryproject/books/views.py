@@ -14,7 +14,7 @@ from . import models
 from . import forms
 from . import filters
 from .data_processing import get_books_model_data
-from libraryproject import settings
+from .prepare_url import prepare_url
 
 class BookListView(BaseFilterView, ListView):
 
@@ -51,26 +51,21 @@ class GoogleBooksView(FormView):
     form_class = forms.GoogleForm
 
     def form_valid(self, form):
-        def prepare_url(form):
-            url = 'https://www.googleapis.com/books/v1/volumes?q='
-            for key, value in form.cleaned_data.items():
-                if value:
-                    url = url + key + ':' + value + '+'
-            url = url[:-1] + '&key=' + settings.GOOGLE_API_KEY
-            return url
         url = prepare_url(form)
         client = requests.session()
         response = client.get(url)
-        if response.json()['totalItems'] > 0:
-            books_list = response.json()['items']
-            books_model_data_list = get_books_model_data(response.json()['items'])
-            for book in books_model_data_list:
-                if not models.Book.objects.filter(isbn_13=book['isbn_13']).count():
-                    try:
-                        new_book = models.Book(**book)
-                        new_book.save()
-                    except:
-                        pass
+
+        if response.json()['totalItems'] == 0:
+            return HttpResponseRedirect(self.get_success_url())
+
+        books_list = response.json()['items']
+        books_model_data_list = get_books_model_data(books_list)
+        for book in books_model_data_list:
+            try:
+                new_book = models.Book(**book)
+                new_book.save()
+            except:
+                pass
 
         return HttpResponseRedirect(self.get_success_url())
 

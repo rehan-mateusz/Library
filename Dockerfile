@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install -r /requirements.txt
 
 RUN mkdir /libraryproject
+COPY ./libraryproject /libraryproject
 WORKDIR /libraryproject
 COPY ./scripts /scripts
 
@@ -23,8 +24,4 @@ RUN adduser user
 RUN chown -R user:user /vol
 RUN chmod -R 755 /vol
 
-USER user
-
-EXPOSE 8000
-
-CMD ["entrypoint.sh"]
+CMD gunicorn libraryproject.wsgi:application --bind 0.0.0.0:$PORT

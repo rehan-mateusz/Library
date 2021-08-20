@@ -3,7 +3,9 @@ djangorestframework
 django-bootstrap3
 requests
 coverage
+pytest
 pytest-django
+pytest-cov
 django-environ
 git+https://github.com/dracos/django-date-extensions.git
 django-filter

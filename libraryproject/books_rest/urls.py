@@ -6,4 +6,4 @@ app_name = 'books_rest'
 
 urlpatterns = [
     path('books_rest/books_list/', views.BooksListAPIView.as_view()),
-    ]
+]

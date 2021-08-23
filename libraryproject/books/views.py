@@ -2,9 +2,9 @@ import requests
 import json
 
 from django.shortcuts import render
-from django.views.generic import  ListView
-from django.views.generic import  UpdateView
-from django.views.generic import  FormView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
+from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 
@@ -16,10 +16,12 @@ from . import filters
 from .data_processing import get_books_model_data
 from .prepare_url import prepare_url
 
+
 class BookListView(BaseFilterView, ListView):
 
     model = models.Book
     filterset_class = filters.BookFilter
+
 
 class BookUpdateOrCreateView(UpdateView):
     model = models.Book
@@ -36,14 +38,15 @@ class BookUpdateOrCreateView(UpdateView):
             try:
                 obj = queryset.get()
             except queryset.model.DoesNotExist:
-                raise Http404(_("No %(verbose_name)s found matching the query")%
-                      {'verbose_name': queryset.model._meta.verbose_name})
+                raise Http404(_("No %(verbose_name)s found matching the query") %
+                              {'verbose_name': queryset.model._meta.verbose_name})
             return obj
         else:
             return None
 
     def get_success_url(self):
         return reverse_lazy('books:books_list')
+
 
 class GoogleBooksView(FormView):
     template_name = 'books/google_books_search.html'
@@ -64,7 +67,7 @@ class GoogleBooksView(FormView):
             try:
                 new_book = models.Book(**book)
                 new_book.save()
-            except:
+            except BaseException:
                 pass
 
         return HttpResponseRedirect(self.get_success_url())

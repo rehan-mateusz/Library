@@ -2,6 +2,7 @@ from django import forms
 
 from . import models
 
+
 class BookForm(forms.ModelForm):
 
     class Meta():
@@ -15,6 +16,7 @@ class BookForm(forms.ModelForm):
             if not isbn_13.isnumeric():
                 self.add_error('isbn_13', 'Only numbers allowed!')
 
+
 class GoogleForm(forms.Form):
     intitle = forms.CharField(required=False, label='Title contains:')
     inauthor = forms.CharField(required=False, label='Author contains:')
@@ -22,9 +24,9 @@ class GoogleForm(forms.Form):
     subject = forms.CharField(required=False, label='Categories contain:')
     isbn = forms.CharField(required=False, label='ISBN containts:')
     lccn = forms.CharField(required=False,
-        label='Library of Congress Control Number')
+                           label='Library of Congress Control Number')
     oclc = forms.CharField(required=False,
-        label='Online Computer Library Center number')
+                           label='Online Computer Library Center number')
 
     def clean(self):
         super(GoogleForm, self).clean()

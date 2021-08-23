@@ -6,6 +6,7 @@ from . import serializers
 
 from books import models
 
+
 class BooksListAPIView(generics.ListAPIView):
     queryset = models.Book.objects.all()
     serializer_class = serializers.BooksSerializer

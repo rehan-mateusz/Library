@@ -16,7 +16,7 @@ class Book(models.Model):
         validators=[MaxValueValidator(limit_value=date.today)])
     isbn_13 = models.CharField(max_length=13, unique=True, null=True,
         blank=True, validators=[MinLengthValidator(13)])
-    pages = models.PositiveSmallIntegerField(null=True, blank=True) #najdluzsza ksiazka ma 5472 strony
+    pages = models.PositiveSmallIntegerField(null=True, blank=True)
     cover_link = models.URLField(max_length=400, null=True, blank=True)
     publication_language = models.CharField(max_length=3, choices=languages,
         null=True, blank=True)

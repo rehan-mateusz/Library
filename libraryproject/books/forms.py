@@ -11,8 +11,9 @@ class BookForm(forms.ModelForm):
     def clean(self):
         super(BookForm, self).clean()
         isbn_13 = self.cleaned_data['isbn_13']
-        if (not isbn_13.isnumeric()) and isbn_13 != '':
-            self.add_error('isbn_13', 'Only numbers allowed!')
+        if isbn_13 is not None:
+            if not isbn_13.isnumeric():
+                self.add_error('isbn_13', 'Only numbers allowed!')
 
 class GoogleForm(forms.Form):
     intitle = forms.CharField(required=False, label='Title contains:')

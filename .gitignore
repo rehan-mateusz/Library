@@ -3,3 +3,4 @@ __pycache__
 .env
 scripts
 *.sqlite3
+*/staticfiles

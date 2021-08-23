@@ -10,3 +10,4 @@ django-environ
 git+https://github.com/dracos/django-date-extensions.git
 django-filter
 gunicorn
+whitenoise

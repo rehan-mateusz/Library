@@ -57,6 +57,8 @@ class BookUpdateOrCreateView(UpdateView):
         return reverse_lazy('books:books_list')
 
     def form_valid(self, form, formset):
+        if self.object is not None:
+            form.id = self.object.id
         self.object = save_form_and_formset(form, formset)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -69,6 +71,7 @@ class BookUpdateOrCreateView(UpdateView):
         form = self.get_form()
         formset = forms.AuthorsFormSet(self.request.POST,
                                        instance = self.object)
+
         if form.is_valid() and formset.is_valid():
             return self.form_valid(form, formset)
         else:

@@ -76,7 +76,11 @@ def save_books(books_model_data_list):
                     new_author.save()
 
 def save_form_and_formset(form, formset):
-    book = save_new_book_or_get_original(form.cleaned_data)
+    if hasattr(form, 'id'):
+        book = models.Book.objects.filter(id=form.id).update(
+                                                        **form.cleaned_data)
+    else:
+        book = save_new_book_or_get_original(form.cleaned_data)
     for author in formset:
         if author.cleaned_data:
             if not author.instance.id:

@@ -79,6 +79,7 @@ def save_form_and_formset(form, formset):
     if hasattr(form, 'id'):
         book = models.Book.objects.filter(id=form.id).update(
                                                         **form.cleaned_data)
+        book = models.Book.objects.get(id=form.id)
     else:
         book = save_new_book_or_get_original(form.cleaned_data)
     for author in formset:

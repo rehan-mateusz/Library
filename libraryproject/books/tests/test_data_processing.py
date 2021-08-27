@@ -1,5 +1,6 @@
 import pytest
 
+from books import models
 from books import data_processing
 
 
@@ -22,15 +23,15 @@ def test_get_value_when_none(book_sample, key):
     assert value is None
 
 
-def test_get_author(book_sample):
-    author = data_processing.get_author(book_sample)
-    assert author == book_sample['authors'][0]
+def test_get_authors(book_sample):
+    authors = data_processing.get_authors(book_sample)
+    assert authors == book_sample['authors']
 
 
-def test_get_author_when_none(book_sample):
+def test_get_authors_when_none(book_sample):
     del book_sample['authors']
-    author = data_processing.get_author(book_sample)
-    assert author is None
+    authors = data_processing.get_authors(book_sample)
+    assert authors is None
 
 
 @pytest.mark.parametrize(
@@ -91,3 +92,28 @@ def test_get_books_model_data(book, book_model_data_list):
     test_books_model_data_list = data_processing.get_books_model_data(
         books_list)
     assert test_books_model_data_list == book_model_data_list
+
+@pytest.mark.django_db
+def test_save_new_book_or_get_original_creates_book(book_model_data_list):
+    book_model = book_model_data_list[0]['book_model_data']
+    new_book = data_processing.save_new_book_or_get_original(book_model)
+    assert models.Book.objects.get(**book_model)
+
+@pytest.mark.django_db
+def test_save_new_book_or_get_original_returns_original(book_model_data_list):
+    book_model = book_model_data_list[0]['book_model_data']
+    old_book = models.Book(**book_model)
+    old_book.save()
+    new_book = data_processing.save_new_book_or_get_original(book_model)
+    assert old_book == new_book
+
+@pytest.mark.django_db
+def test_save_books_creates_book(book_model_data_list):
+    book_model = book_model_data_list[0]['book_model_data']
+    data_processing.save_books(book_model_data_list)
+    assert models.Book.objects.get(**book_model)
+
+@pytest.mark.django_db
+def test_save_form_and_formset_creates_book(book_form, author_formset):
+    data_processing.save_form_and_formset(book_form, author_formset)
+    assert models.Book.objects.get(**book_form.cleaned_data)

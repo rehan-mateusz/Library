@@ -1,5 +1,7 @@
 import pytest
 
+from books import models
+
 @pytest.fixture
 def book_sample():
     book = {
@@ -28,7 +30,7 @@ def book():
             'industryIdentifiers' : [
                 {'type' : 'ISBN_13', 'identifier' : '1234567890123'},
             ],
-            'pagesCount' : '300',
+            'pageCount' : '300',
             'imageLinks' : {
                 'thumbnail' : 'https://samplelink.com',
                 'smallThumbnail' : 'https://samplelink2.com'
@@ -42,14 +44,17 @@ def book():
 def book_model_data_list():
     book_model_data = {
         'title' : 'test_title',
-        'author' : 'test_author1',
         'published_date' : '2010-01-01',
         'isbn_13' : '1234567890123',
         'pages' : '300',
         'cover_link' : 'https://samplelink.com',
         'publication_language' : 'pl',
     }
-    return [book_model_data]
+    book_model_data_list = {
+        'book_model_data' : book_model_data,
+        'authors' : ['test_author1', 'test_author2']
+    }
+    return [book_model_data_list]
 
 @pytest.fixture
 def form_data():
@@ -76,3 +81,40 @@ def form_empty_data():
         'oclc' : ''
     }
     return data
+
+@pytest.fixture
+def book_form():
+
+    class Form:
+        def __init__(self):
+            self.cleaned_data = {
+                'title' : 'test_title',
+                'published_date' : '2010-01-01',
+                'isbn_13' : '1234567890123',
+                'pages' : '300',
+                'cover_link' : 'https://samplelink.com',
+                'publication_language' : 'pl',
+            }
+    form = Form()
+    return form
+
+@pytest.fixture
+def author_formset():
+
+    class Form:
+        def __init__(self, cleaned_data):
+            self.cleaned_data = cleaned_data
+            self.instance = models.Author(name=self.cleaned_data['name'])
+    data1 = {
+        'name' : 'test_author1',
+        'book' : '',
+        'DELETE' : 'FALSE'
+    }
+    data2 = {
+        'name' : 'test_author2',
+        'book' : '',
+        'DELETE' : 'FALSE'
+    }
+    form = Form(data1)
+    form2 = Form(data2)
+    return (form, form2)

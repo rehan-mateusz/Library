@@ -7,6 +7,7 @@
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
+    {% bootstrap_formset formset layout='horizontal' %}
     {% if form.title.value %}
       <input class="btn btn-default" type="submit" value="Edit!">
     {% else %}

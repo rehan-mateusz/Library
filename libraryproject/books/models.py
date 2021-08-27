@@ -11,9 +11,10 @@ from .languages import languages
 
 class Book(models.Model):
     title = models.CharField(max_length=256)
-    author = models.CharField(max_length=256)
     published_date = fields.ApproximateDateField(
-        null=True, blank=True, validators=[
+        null=True,
+        blank=True,
+        validators=[
             MaxValueValidator(
                 limit_value=date.today)])
     isbn_13 = models.CharField(max_length=13, unique=True, null=True,
@@ -29,8 +30,13 @@ class Book(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['title', 'author', 'published_date', 'isbn_13',
+                fields=['title', 'published_date', 'isbn_13',
                         'pages', 'publication_language'],
                 name='unique_joining',
             )
         ]
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=256)
+    book = models.ForeignKey(Book, null=True, on_delete=models.CASCADE)

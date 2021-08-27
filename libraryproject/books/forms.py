@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import inlineformset_factory
 
 from . import models
 
@@ -15,6 +16,20 @@ class BookForm(forms.ModelForm):
         if isbn_13 is not None:
             if not isbn_13.isnumeric():
                 self.add_error('isbn_13', 'Only numbers allowed!')
+
+class AuthorForm(forms.ModelForm):
+    name = forms.CharField(label='Author:')
+    class Meta():
+        model = models.Author
+        fields = ('name',)
+
+AuthorsFormSet = inlineformset_factory(
+                    models.Book,
+                    models.Author,
+                    form = AuthorForm,
+                    max_num=5,
+                    validate_max=True,
+                    extra = 3,)
 
 
 class GoogleForm(forms.Form):

@@ -5,6 +5,10 @@ from books.languages import languages
 
 
 class BookFilter(filters.FilterSet):
+    author = filters.CharFilter(
+        lookup_expr='icontains',
+        label='Author contains:',
+        field_name='author__name',)
     publication_language = filters.ChoiceFilter(choices=languages)
     published_after = filters.DateFilter(
         lookup_expr='gt',
@@ -19,5 +23,4 @@ class BookFilter(filters.FilterSet):
         model = models.Book
         fields = {
             'title': ['icontains'],
-            'author': ['icontains'],
         }

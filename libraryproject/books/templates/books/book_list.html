@@ -28,29 +28,39 @@
   </a>
 </div>
 <div class="container">
-    <table class="table-sm table-striped">
+    <table class="table-sm table-bordered table-striped">
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Published</th>
-          <th>ISBN</th>
-          <th>Pages</th>
-          <th>Link to cover</th>
-          <th>Language</th>
+          <th class="text-center">Title</th>
+          <th class="text-center">Authors</th>
+          <th class="text-center">Published</th>
+          <th class="text-center">ISBN</th>
+          <th class="text-center">Pages</th>
+          <th class="text-center">Link to cover</th>
+          <th class="text-center">Language</th>
         </tr>
       </thead>
       <tbody>
         {% for book in book_list %}
         <tr>
-          <td> {{book.title}}</td>
-          <td> {{book.author}}</td>
-          <td> {{book.published_date}}</td>
-          <td> {{book.isbn_13}}</td>
-          <td> {{book.pages}}</td>
-          <td> {{book.cover_link}}</td>
-          <td> {{book.publication_language}}</td>
-          <td>
+          <td class="text-center"> {{book.title}}</td>
+          <td class="text-center">
+            {% for author in book.author_set.all %}
+              {{author.name}} <br>
+            {% endfor %}
+          </td>
+          <td class="text-center"> {{book.published_date}}</td>
+          <td class="text-center"> {{book.isbn_13}}</td>
+          <td class="text-center"> {{book.pages}}</td>
+          <td class="text-center">
+            {% if book.cover_link %}
+              <img src="{{book.cover_link}}" alt="no-cover" width="50" height="60">
+            {% else %}
+            no cover
+            {% endif %}
+          </td>
+          <td class="text-center"> {{book.publication_language}}</td>
+          <td class="text-center">
             <a href="{%url 'books:book_update' book.id %}">
               <button type="button" class="btn btn-default">Edit</button>
             </a>

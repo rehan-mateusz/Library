@@ -5,6 +5,10 @@ from .languages import languages
 
 
 class BookFilter(django_filters.FilterSet):
+    author = django_filters.CharFilter(
+        lookup_expr='icontains',
+        label='Author:',
+        field_name='author__name',)
     publication_language = django_filters.ChoiceFilter(choices=languages)
     published_after = django_filters.DateFilter(
         lookup_expr='gt',
@@ -19,5 +23,4 @@ class BookFilter(django_filters.FilterSet):
         model = models.Book
         fields = {
             'title': ['icontains'],
-            'author': ['icontains'],
         }

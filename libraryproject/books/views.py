@@ -14,6 +14,8 @@ from . import models
 from . import forms
 from . import filters
 from .data_processing import get_books_model_data
+from .data_processing import save_books
+from .data_processing import save_form_and_formset
 from .prepare_url import prepare_url
 
 
@@ -44,8 +46,33 @@ class BookUpdateOrCreateView(UpdateView):
         else:
             return None
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form(self.form_class)
+        formset = forms.AuthorsFormSet(instance = self.object)
+        return self.render_to_response(self.get_context_data(form=form,
+                                                             formset=formset))
+
     def get_success_url(self):
         return reverse_lazy('books:books_list')
+
+    def form_valid(self, form, formset):
+        self.object = save_form_and_formset(form, formset)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, formset):
+        return self.render_to_response(self.get_context_data(form=form,
+                                                            formset=formset))
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        formset = forms.AuthorsFormSet(self.request.POST,
+                                       instance = self.object)
+        if form.is_valid() and formset.is_valid():
+            return self.form_valid(form, formset)
+        else:
+            return self.form_invalid(form, formset)
 
 
 class GoogleBooksView(FormView):
@@ -63,13 +90,7 @@ class GoogleBooksView(FormView):
 
         books_list = response.json()['items']
         books_model_data_list = get_books_model_data(books_list)
-        for book in books_model_data_list:
-            try:
-                new_book = models.Book(**book)
-                new_book.save()
-            except BaseException:
-                pass
-
+        save_books(books_model_data_list)
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
